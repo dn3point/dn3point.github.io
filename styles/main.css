@@ -1,0 +1,28 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Shadows Into Light';
+}
+
+.full-size-box {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0ABAB5;
+}
+
+div.full-size-box p {
+  margin: 0;
+  color: white;
+  font-size: min(25vh, 15vw);
+}
+
+div.full-size-box p a { 
+  color: inherit;
+  text-decoration: inherit;
+}
