@@ -1,6 +1,6 @@
 # dn3point.github.io
 
-Personal website: [zhaoyuan.page](https://zhaoyuan.page)
+Personal website: [dn3point.github.io](https://dn3point.github.io/)
 
 A single static page in a cyberpunk style. There's no build step: GitHub Pages serves the files as they are.
 
@@ -42,7 +42,13 @@ With `prefers-reduced-motion` set, all motion is skipped and the page renders st
 | `styles/fx.css` | Motion and effect styles |
 | `scripts/main.js` | Clock, nav, skyline, GitHub data, all GSAP animation |
 | `favicon.svg` | Icon |
-| `CNAME` | Custom domain |
+
+## Custom domain
+
+The site is served from `dn3point.github.io` with no custom domain. To use one again, add a `CNAME` file containing
+the domain (or set it in Settings → Pages), then point the domain's DNS at GitHub Pages: `A` records
+`185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`, or a `CNAME` record to
+`dn3point.github.io` for a subdomain.
 
 ## Local preview
 
