@@ -3,13 +3,383 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zhao Yuan's Page</title>
-  <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+  <title>Zhao Yuan // zhaoyuan.page</title>
+  <meta name="description" content="Zhao Yuan — Software Engineer at GIC Labs, Singapore. Web, mobile and cloud.">
+  <meta name="theme-color" content="#05060a">
+  <meta property="og:title" content="Zhao Yuan // zhaoyuan.page">
+  <meta property="og:description" content="Software Engineer at GIC Labs, Singapore. Web, mobile and cloud.">
+  <meta property="og:url" content="https://zhaoyuan.page/">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Fonts: Orbitron (display), Rajdhani (body), Share Tech Mono (HUD); Noto Sans SC subset for the neon sign only -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&text=%E6%96%B0%E5%8A%A0%E5%9D%A1%E5%B7%A5%E7%A8%8B%E5%B8%88&display=swap" rel="stylesheet">
+
+  <!-- augmented-ui: cyberpunk clipped borders & panels -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/augmented-ui@2.0.0/augmented-ui.min.css"
+        integrity="sha384-AwggZlPSUmI5legYzInsBEfKSXK/tsAZalUjV52u/ttb2R7i6pprcWAm8VWPBnWy" crossorigin="anonymous">
+  <!-- AOS: animate on scroll -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
+        integrity="sha384-/rJKQnzOkEo+daG0jMjU1IwwY9unxt1NBw3Ef2fmOJ3PW/TfAg2KXVoWwMZQZtw9" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/main.css">
+  <noscript><style>[data-aos]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
-  <div class="full-size-box">
-    <p><a href="https://www.linkedin.com/in/yuan-zhao-69145576">ZHAO YUAN</a></p>
-  </div>
+  <a class="skip-link" href="#about">Skip to content</a>
+
+  <!-- ============ HUD / NAV ============ -->
+  <header class="hud" id="top">
+    <a class="hud__logo" href="#top" aria-label="Back to top">
+      <span class="hud__logo-mark">ZY</span><span class="hud__logo-path">://zhaoyuan.page</span>
+    </a>
+    <button class="hud__toggle" type="button" aria-expanded="false" aria-controls="hud-nav" aria-label="Toggle navigation">
+      <iconify-icon icon="mdi:menu" width="20" height="20"></iconify-icon><span>MENU</span>
+    </button>
+    <nav class="hud__nav" id="hud-nav" aria-label="Sections">
+      <a href="#about"><span>01</span>About</a>
+      <a href="#stack"><span>02</span>Stack</a>
+      <a href="#log"><span>03</span>Log</a>
+      <a href="#projects"><span>04</span>Projects</a>
+      <a href="#contact"><span>05</span>Contact</a>
+    </nav>
+    <div class="hud__clock" aria-label="Local time in Singapore">
+      <span class="dot"></span>SGT <time id="sgt-clock">--:--:--</time>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="hero__horizon" aria-hidden="true"></div>
+
+      <div class="hero__sign" aria-hidden="true">
+        <span>新<br>加<br>坡</span>
+        <span class="hero__sign--alt">工<br>程<br>师</span>
+      </div>
+
+      <div class="hero__content">
+        <p class="eyebrow">[ NETRUNNER PROFILE // ID 4892654 // STATUS: <b class="ok">ONLINE</b> ]</p>
+        <h1 class="glitch" id="hero-title" data-text="ZHAO YUAN">ZHAO YUAN</h1>
+        <p class="hero__handle">a.k.a. <b>dn3point</b></p>
+
+        <div class="terminal" data-augmented-ui="tl-clip br-clip border">
+          <span class="terminal__prompt">&gt;</span>
+          <span id="typed" class="terminal__text">Software Engineer @ GIC Labs</span>
+        </div>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#projects" data-augmented-ui="tl-clip br-clip both">
+            <iconify-icon icon="mdi:code-braces"></iconify-icon> View Projects
+          </a>
+          <a class="btn btn--ghost" href="#contact" data-augmented-ui="tr-clip bl-clip border">
+            <iconify-icon icon="mdi:access-point-network"></iconify-icon> Jack In
+          </a>
+        </div>
+      </div>
+
+      <dl class="hero__readout" aria-label="Location readout">
+        <div><dt>LOC</dt><dd>SINGAPORE</dd></div>
+        <div><dt>LAT</dt><dd>01.3521°N</dd></div>
+        <div><dt>LON</dt><dd>103.8198°E</dd></div>
+        <div><dt>UPLINK</dt><dd class="ok">STABLE</dd></div>
+      </dl>
+
+      <a class="hero__scroll" href="#about" aria-label="Scroll to About">
+        <span>SCROLL</span><i></i>
+      </a>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <header class="section__head" data-aos="fade-right">
+        <span class="section__index">01</span>
+        <h2 id="about-title" class="section__title" data-text="ABOUT">ABOUT</h2>
+        <span class="section__sub">// identity.dat</span>
+      </header>
+
+      <div class="about">
+        <article class="id-card" data-augmented-ui="tl-clip tr-clip-x br-clip bl-clip border" data-aos="fade-up">
+          <div class="id-card__photo">
+            <img src="https://avatars.githubusercontent.com/u/4892654?v=4&s=320" alt="Zhao Yuan's GitHub avatar"
+                 width="160" height="160" loading="lazy">
+          </div>
+          <dl class="id-card__fields">
+            <div><dt>NAME</dt><dd>ZHAO YUAN</dd></div>
+            <div><dt>HANDLE</dt><dd>dn3point</dd></div>
+            <div><dt>CLASS</dt><dd>Software Engineer</dd></div>
+            <div><dt>FACTION</dt><dd>GIC Labs</dd></div>
+            <div><dt>DISTRICT</dt><dd>Singapore</dd></div>
+            <div><dt>ONLINE SINCE</dt><dd>2013</dd></div>
+            <div><dt>PUBLIC REPOS</dt><dd id="stat-repos">—</dd></div>
+          </dl>
+          <div class="id-card__barcode" aria-hidden="true">ZY-4892654-SG</div>
+        </article>
+
+        <div class="about__text" data-aos="fade-up" data-aos-delay="100">
+          <p class="lead">
+            I'm <b>Zhao Yuan</b>, a software engineer at <b>GIC Labs</b> in Singapore.
+          </p>
+          <p>
+            I like building things end to end. I started with native Android apps,
+            moved on to React and Next.js on the web, and I'm comfortable with the cloud and Linux
+            plumbing behind them. I studied computer networks and streaming media systems at
+            <b>NUS School of Computing</b>.
+          </p>
+          <p>
+            Away from work I keep learning in public: course projects, Udacity nanodegrees, small
+            experiments and notes to my future self. This page has lived at
+            <b>zhaoyuan.page</b> since 2020.
+          </p>
+          <ul class="about__tags">
+            <li>#web</li><li>#mobile</li><li>#cloud</li><li>#networks</li><li>#lifelong-learning</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STACK ============ -->
+    <section class="section" id="stack" aria-labelledby="stack-title">
+      <header class="section__head" data-aos="fade-right">
+        <span class="section__index">02</span>
+        <h2 id="stack-title" class="section__title" data-text="CYBERWARE">CYBERWARE</h2>
+        <span class="section__sub">// installed modules</span>
+      </header>
+
+      <div class="stack">
+        <article class="module" data-augmented-ui="tl-clip br-clip border" data-aos="fade-up">
+          <h3><iconify-icon icon="mdi:web"></iconify-icon> Frontend</h3>
+          <ul class="chips">
+            <li><iconify-icon icon="simple-icons:typescript"></iconify-icon>TypeScript</li>
+            <li><iconify-icon icon="simple-icons:javascript"></iconify-icon>JavaScript</li>
+            <li><iconify-icon icon="simple-icons:react"></iconify-icon>React</li>
+            <li><iconify-icon icon="simple-icons:nextdotjs"></iconify-icon>Next.js</li>
+            <li><iconify-icon icon="simple-icons:html5"></iconify-icon>HTML / CSS</li>
+          </ul>
+        </article>
+
+        <article class="module module--magenta" data-augmented-ui="tl-clip br-clip border" data-aos="fade-up" data-aos-delay="80">
+          <h3><iconify-icon icon="mdi:server-network"></iconify-icon> Backend</h3>
+          <ul class="chips">
+            <li><iconify-icon icon="simple-icons:python"></iconify-icon>Python</li>
+            <li><iconify-icon icon="simple-icons:openjdk"></iconify-icon>Java</li>
+            <li><iconify-icon icon="simple-icons:nodedotjs"></iconify-icon>Node.js</li>
+            <li><iconify-icon icon="simple-icons:ruby"></iconify-icon>Ruby / Jekyll</li>
+          </ul>
+        </article>
+
+        <article class="module module--yellow" data-augmented-ui="tl-clip br-clip border" data-aos="fade-up" data-aos-delay="160">
+          <h3><iconify-icon icon="mdi:cellphone"></iconify-icon> Mobile</h3>
+          <ul class="chips">
+            <li><iconify-icon icon="simple-icons:android"></iconify-icon>Android</li>
+            <li><iconify-icon icon="mdi:android-studio"></iconify-icon>Android Studio</li>
+            <li><iconify-icon icon="simple-icons:react"></iconify-icon>React Native</li>
+          </ul>
+        </article>
+
+        <article class="module" data-augmented-ui="tl-clip br-clip border" data-aos="fade-up" data-aos-delay="240">
+          <h3><iconify-icon icon="mdi:cloud-outline"></iconify-icon> Cloud &amp; Systems</h3>
+          <ul class="chips">
+            <li><iconify-icon icon="simple-icons:amazonwebservices"></iconify-icon>AWS</li>
+            <li><iconify-icon icon="simple-icons:vercel"></iconify-icon>Vercel</li>
+            <li><iconify-icon icon="simple-icons:linux"></iconify-icon>Linux</li>
+            <li><iconify-icon icon="simple-icons:git"></iconify-icon>Git</li>
+            <li><iconify-icon icon="mdi:lan"></iconify-icon>Networking</li>
+            <li><iconify-icon icon="simple-icons:ffmpeg"></iconify-icon>Streaming media</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ LOG / TIMELINE ============ -->
+    <section class="section" id="log" aria-labelledby="log-title">
+      <header class="section__head" data-aos="fade-right">
+        <span class="section__index">03</span>
+        <h2 id="log-title" class="section__title" data-text="SYSTEM LOG">SYSTEM LOG</h2>
+        <span class="section__sub">// tail -f career.log</span>
+      </header>
+
+      <ol class="timeline">
+        <li data-aos="fade-left">
+          <time>NOW</time>
+          <div>
+            <h3>Software Engineer @ GIC Labs</h3>
+            <p>Building software from Singapore.</p>
+          </div>
+        </li>
+        <li data-aos="fade-left">
+          <time>2022</time>
+          <div>
+            <h3>Rebuilt the personal stack</h3>
+            <p>Next.js site experiments and a notes blog, e.g. installing FFmpeg on RHEL 8.</p>
+          </div>
+        </li>
+        <li data-aos="fade-left">
+          <time>2021</time>
+          <div>
+            <h3>NUS CS5229 Advanced Computer Networks</h3>
+            <p>Plus Next.js and AWS Amplify side experiments.</p>
+          </div>
+        </li>
+        <li data-aos="fade-left">
+          <time>2020</time>
+          <div>
+            <h3>zhaoyuan.page goes live · Udacity React Nanodegree</h3>
+            <p>MyReads, Would You Rather and UdaciCards: React, Redux and React Native.</p>
+          </div>
+        </li>
+        <li data-aos="fade-left">
+          <time>2019</time>
+          <div>
+            <h3>NUS School of Computing</h3>
+            <p>CS5248 streaming client: the client-side app for a continuous-media streaming system.</p>
+          </div>
+        </li>
+        <li data-aos="fade-left">
+          <time>2016</time>
+          <div>
+            <h3>Udacity Android Developer Nanodegree</h3>
+            <p>App Portfolio, Popular Movies, Baking App and Build It Bigger in Java on Android.</p>
+          </div>
+        </li>
+        <li data-aos="fade-left">
+          <time>2013</time>
+          <div>
+            <h3>Jacked into GitHub</h3>
+            <p>Account <code>dn3point</code> created.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ PROJECTS ============ -->
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <header class="section__head" data-aos="fade-right">
+        <span class="section__index">04</span>
+        <h2 id="projects-title" class="section__title" data-text="DATA SHARDS">DATA SHARDS</h2>
+        <span class="section__sub">// selected public work</span>
+      </header>
+
+      <div class="shards">
+        <a class="shard" href="https://github.com/dn3point/nus-streaming_client" target="_blank" rel="noopener"
+           data-augmented-ui="tl-clip tr-clip br-clip-x border" data-aos="zoom-in-up">
+          <span class="shard__tag">NUS · CS5248</span>
+          <h3>Streaming Client</h3>
+          <p>Client-side app for a continuous-media streaming system, built for NUS CS5248.</p>
+          <span class="shard__meta"><i class="lang lang--java"></i>Java</span>
+        </a>
+
+        <a class="shard" href="https://github.com/dn3point/nus-cs5229" target="_blank" rel="noopener"
+           data-augmented-ui="tl-clip tr-clip br-clip-x border" data-aos="zoom-in-up" data-aos-delay="80">
+          <span class="shard__tag">NUS · CS5229</span>
+          <h3>Advanced Computer Networks</h3>
+          <p>Coursework for NUS CS5229 Advanced Computer Networks.</p>
+          <span class="shard__meta"><i class="lang lang--html"></i>HTML</span>
+        </a>
+
+        <a class="shard" href="https://github.com/dn3point/ud-udaci_cards" target="_blank" rel="noopener"
+           data-augmented-ui="tl-clip tr-clip br-clip-x border" data-aos="zoom-in-up" data-aos-delay="160">
+          <span class="shard__tag">UDACITY · REACT</span>
+          <h3>React Nanodegree</h3>
+          <p>MyReads, Would You Rather and UdaciCards, from React to Redux to React Native.</p>
+          <span class="shard__meta"><i class="lang lang--js"></i>JavaScript</span>
+        </a>
+
+        <a class="shard" href="https://github.com/dn3point/ud-baking_app" target="_blank" rel="noopener"
+           data-augmented-ui="tl-clip tr-clip br-clip-x border" data-aos="zoom-in-up">
+          <span class="shard__tag">UDACITY · ANDROID</span>
+          <h3>Android Nanodegree</h3>
+          <p>Popular Movies, Baking App and Build It Bigger: native Android apps written in Java.</p>
+          <span class="shard__meta"><i class="lang lang--java"></i>Java</span>
+        </a>
+
+        <a class="shard" href="https://github.com/dn3point/theme-zy" target="_blank" rel="noopener"
+           data-augmented-ui="tl-clip tr-clip br-clip-x border" data-aos="zoom-in-up" data-aos-delay="80">
+          <span class="shard__tag">OPEN SOURCE</span>
+          <h3>theme-zy</h3>
+          <p>A Jekyll theme packaged as a Ruby gem.</p>
+          <span class="shard__meta"><i class="lang lang--ruby"></i>Ruby</span>
+        </a>
+
+        <a class="shard" href="https://github.com/dn3point/m-blog" target="_blank" rel="noopener"
+           data-augmented-ui="tl-clip tr-clip br-clip-x border" data-aos="zoom-in-up" data-aos-delay="160">
+          <span class="shard__tag">NOTES</span>
+          <h3>m-blog</h3>
+          <p>Notes and how-tos, written down so I don't have to work them out twice.</p>
+          <span class="shard__meta"><i class="lang lang--md"></i>Markdown</span>
+        </a>
+      </div>
+
+      <!-- Live feed: filled by scripts/main.js from the public GitHub API -->
+      <div class="feed" data-augmented-ui="tl-clip br-clip border" data-aos="fade-up">
+        <div class="feed__head">
+          <span class="dot"></span> LIVE FEED // latest public pushes on GitHub
+        </div>
+        <ul class="feed__list" id="feed-list">
+          <li class="feed__status">Establishing uplink…</li>
+        </ul>
+        <a class="feed__more" href="https://github.com/dn3point?tab=repositories" target="_blank" rel="noopener">
+          All repositories <iconify-icon icon="mdi:arrow-top-right"></iconify-icon>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <header class="section__head" data-aos="fade-right">
+        <span class="section__index">05</span>
+        <h2 id="contact-title" class="section__title" data-text="JACK IN">JACK IN</h2>
+        <span class="section__sub">// open a channel</span>
+      </header>
+
+      <div class="contact" data-augmented-ui="tl-clip tr-clip-x br-clip bl-clip border" data-aos="fade-up">
+        <pre class="contact__term" aria-hidden="true"><span class="c-mute">$</span> ping zhaoyuan.page
+<span class="c-ok">64 bytes from zhaoyuan.page: icmp_seq=1 ttl=64 time=0.42 ms</span>
+<span class="c-mute">$</span> whoami
+zhao_yuan <span class="c-mute">// software engineer, singapore</span>
+<span class="c-mute">$</span> <span class="cursor">█</span></pre>
+
+        <div class="contact__links">
+          <a class="btn btn--primary" href="https://github.com/dn3point" target="_blank" rel="noopener"
+             data-augmented-ui="tl-clip br-clip both">
+            <iconify-icon icon="mdi:github"></iconify-icon> GitHub
+          </a>
+          <a class="btn btn--magenta" href="https://www.linkedin.com/in/yuan-zhao-69145576" target="_blank" rel="noopener"
+             data-augmented-ui="tl-clip br-clip both">
+            <iconify-icon icon="mdi:linkedin"></iconify-icon> LinkedIn
+          </a>
+          <a class="btn btn--ghost" href="mailto:dn3point@gmail.com" data-augmented-ui="tr-clip bl-clip border">
+            <iconify-icon icon="mdi:email-outline"></iconify-icon> dn3point@gmail.com
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year">2026</span> ZHAO YUAN // zhaoyuan.page</p>
+    <p class="footer__credits">
+      Built with
+      <a href="https://augmented-ui.com/" target="_blank" rel="noopener">augmented-ui</a>,
+      <a href="https://github.com/mattboldt/typed.js" target="_blank" rel="noopener">Typed.js</a>,
+      <a href="https://michalsnik.github.io/aos/" target="_blank" rel="noopener">AOS</a> &amp;
+      <a href="https://iconify.design/" target="_blank" rel="noopener">Iconify</a>.
+      Hosted on GitHub Pages.
+    </p>
+  </footer>
+
+  <div class="fx-scanlines" aria-hidden="true"></div>
+  <div class="fx-vignette" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@3.0.3/dist/iconify-icon.min.js"
+          integrity="sha384-jypoV+nlFXLykSFUJkpVjPG/eid90inFxyvUI1corcUR778eMGexPBFzNC94eOc+" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"
+          integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"
+          integrity="sha384-n1AULnKdMJlK1oQCLNDL9qZsDgXtH6jRYFCpBtWFc+a9Yve0KSoMn575rk755NJZ" crossorigin="anonymous"></script>
+  <script src="scripts/main.js"></script>
 </body>
 </html>
