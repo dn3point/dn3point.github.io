@@ -1,6 +1,6 @@
 # dn3point.github.io
 
-Personal website: [dn3point.github.io](https://dn3point.github.io/)
+Personal website: [dn3point.com](https://dn3point.com/)
 
 A single static page in a cyberpunk style. There's no build step: GitHub Pages serves the files as they are.
 
@@ -42,13 +42,20 @@ With `prefers-reduced-motion` set, all motion is skipped and the page renders st
 | `styles/fx.css` | Motion and effect styles |
 | `scripts/main.js` | Clock, nav, skyline, GitHub data, all GSAP animation |
 | `favicon.svg` | Icon |
+| `CNAME` | Custom domain (`dn3point.com`) |
 
 ## Custom domain
 
-The site is served from `dn3point.github.io` with no custom domain. To use one again, add a `CNAME` file containing
-the domain (or set it in Settings → Pages), then point the domain's DNS at GitHub Pages: `A` records
-`185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`, or a `CNAME` record to
-`dn3point.github.io` for a subdomain.
+`CNAME` sets the domain to `dn3point.com`, and GitHub Pages redirects `dn3point.github.io` and `www.dn3point.com` to it.
+DNS lives in Route 53 (hosted zone `dn3point.com`):
+
+| Name | Type | Value |
+| --- | --- | --- |
+| (apex) | A | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` |
+| (apex) | AAAA | `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153` |
+| `www` | CNAME | `dn3point.github.io` |
+
+Once the DNS check passes, turn on **Enforce HTTPS** under Settings → Pages.
 
 ## Local preview
 
