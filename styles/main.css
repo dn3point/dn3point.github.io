@@ -1,7 +1,7 @@
 /* ==========================================================================
    zhaoyuan.page — cyberpunk single page
-   Shapes come from augmented-ui (data-augmented-ui attributes),
-   scroll reveals from AOS, typing from Typed.js, icons from Iconify.
+   Shapes come from augmented-ui (data-augmented-ui attributes), icons from
+   Iconify. Motion and effect styles live in fx.css.
    ========================================================================== */
 
 :root {
@@ -159,7 +159,7 @@ code {
   color: var(--text);
   transition: color 0.2s;
 }
-.hud__nav a span {
+.hud__nav a .hud__num {
   margin-right: 6px;
   font-family: var(--font-mono);
   color: var(--magenta);
@@ -236,7 +236,7 @@ code {
   transform-origin: 50% 0;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
           mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
-  animation: grid-scroll 3.2s linear infinite;
+  animation: grid-scroll 1.6s linear infinite;
 }
 .hero__horizon {
   position: absolute;
@@ -253,7 +253,7 @@ code {
   position: relative;
   max-width: 1100px;
   text-align: center;
-  transform: translateY(-5vh);
+  margin-top: -10vh;
 }
 
 .eyebrow {
@@ -482,6 +482,8 @@ main { overflow-x: clip; }
   height: 3px;
   background: var(--yellow);
   box-shadow: 0 0 12px rgba(252, 238, 10, 0.6);
+  transform: scaleX(var(--bar, 1));
+  transform-origin: left;
 }
 .section__index {
   font-family: var(--font-mono);
@@ -530,6 +532,7 @@ main { overflow-x: clip; }
   --aug-tr: 14px;
   --aug-br: 22px;
   --aug-bl: 10px;
+  position: relative;
   padding: 26px;
   background: linear-gradient(160deg, rgba(10, 186, 181, 0.10), rgba(255, 42, 109, 0.06));
 }
@@ -563,6 +566,7 @@ main { overflow-x: clip; }
   position: absolute;
   left: 0;
   right: 0;
+  top: 0;
   height: 22%;
   z-index: 2;
   background: linear-gradient(transparent, rgba(63, 245, 238, 0.55), transparent);
@@ -684,6 +688,17 @@ main { overflow-x: clip; }
 }
 
 /* ---------- timeline ---------- */
+.timeline-wrap { position: relative; }
+.timeline__beam {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(var(--yellow), var(--cyan-hi) 30%, var(--magenta) 80%, transparent);
+  box-shadow: 0 0 12px rgba(63, 245, 238, 0.7);
+  transform-origin: top;
+}
 .timeline {
   position: relative;
   margin: 0;
@@ -697,8 +712,7 @@ main { overflow-x: clip; }
   top: 6px;
   bottom: 6px;
   width: 2px;
-  background: linear-gradient(var(--cyan-hi), var(--magenta) 60%, transparent);
-  box-shadow: 0 0 10px rgba(63, 245, 238, 0.5);
+  background: rgba(10, 186, 181, 0.18);
 }
 .timeline li {
   position: relative;
@@ -718,6 +732,7 @@ main { overflow-x: clip; }
   border: 2px solid var(--cyan-hi);
   transform: rotate(45deg);
   box-shadow: 0 0 10px var(--cyan-hi);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 .timeline li:first-child::before {
   background: var(--yellow);
@@ -751,6 +766,7 @@ main { overflow-x: clip; }
   --aug-tl: 18px;
   --aug-tr: 8px;
   --aug-br: 18px;
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -759,12 +775,11 @@ main { overflow-x: clip; }
   color: inherit;
   text-decoration: none;
   background: linear-gradient(160deg, rgba(10, 186, 181, 0.07), rgba(5, 6, 10, 0.4));
-  transition: transform 0.2s ease, background 0.25s ease;
+  transition: background 0.25s ease;
 }
 .shard:hover,
 .shard:focus-visible {
   --aug-border-bg: var(--magenta);
-  transform: translateY(-4px);
   background: linear-gradient(160deg, rgba(255, 42, 109, 0.12), rgba(5, 6, 10, 0.4));
 }
 .shard__tag {
@@ -878,9 +893,10 @@ main { overflow-x: clip; }
   font-size: 0.92rem;
   line-height: 1.8;
   color: var(--text);
-  white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+.contact__term p { margin: 0; }
+.c-warn { color: var(--yellow); }
 .c-mute { color: var(--muted); }
 .c-ok { color: var(--cyan-hi); }
 .cursor { color: var(--yellow); animation: blink 1s steps(1) infinite; }
@@ -916,8 +932,7 @@ main { overflow-x: clip; }
 }
 .fx-vignette { z-index: 40; }
 .fx-scanlines {
-  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px);
-  mix-blend-mode: multiply;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 3px);
 }
 .fx-scanlines::after {
   /* slow rolling CRT band */
@@ -925,6 +940,7 @@ main { overflow-x: clip; }
   position: absolute;
   left: 0;
   right: 0;
+  top: 0;
   height: 18vh;
   background: linear-gradient(transparent, rgba(63, 245, 238, 0.035), transparent);
   animation: roll 9s linear infinite;
@@ -936,15 +952,18 @@ main { overflow-x: clip; }
 /* ---------- keyframes ---------- */
 @keyframes pulse { 50% { opacity: 0.35; } }
 @keyframes blink { 50% { opacity: 0; } }
-@keyframes grid-scroll { to { background-position: 0 64px, 0 64px; } }
+@keyframes grid-scroll {
+  from { transform: perspective(320px) rotateX(62deg) translateY(0); }
+  to   { transform: perspective(320px) rotateX(62deg) translateY(64px); }
+}
 @keyframes drip {
   0% { transform: scaleY(0); transform-origin: top; }
   50% { transform: scaleY(1); transform-origin: top; }
   51% { transform: scaleY(1); transform-origin: bottom; }
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
-@keyframes scan { from { top: -25%; } to { top: 105%; } }
-@keyframes roll { from { top: -20vh; } to { top: 110vh; } }
+@keyframes scan { from { transform: translateY(-110%); } to { transform: translateY(480%); } }
+@keyframes roll { from { transform: translateY(-20vh); } to { transform: translateY(110vh); } }
 
 @keyframes neon-flicker {
   0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
@@ -1005,7 +1024,7 @@ main { overflow-x: clip; }
   .hero__sign { font-size: 1.05rem; gap: 6px; top: calc(var(--hud-h) + 14px); }
   .hero__sign span { padding: 8px 4px; }
   .hero__sign--alt { margin-top: 20px; }
-  .hero__content { transform: none; }
+  .hero__content { margin-top: 0; }
   .hero__readout { bottom: 28px; left: 50%; transform: translateX(-50%); width: max-content; }
   .hero__scroll { display: none; }
   .terminal { padding: 12px 16px; }

@@ -1,0 +1,461 @@
+/* ==========================================================================
+   Motion & effects layer
+   Looks and CSS-only loops for the boot screen, skyline, rain, HUD rings,
+   tickers, reticle cursor and glitch overlay. Timelines and scroll-driven
+   animation live in scripts/main.js (GSAP). Everything here is switched off
+   by the prefers-reduced-motion block at the end of main.css.
+   ========================================================================== */
+
+/* ---------- pre-paint states (classes set by the inline script in <head>) ---------- */
+.fx-pending .hero__content > *,
+.fx-pending .hero__sign,
+.fx-pending .hero__readout,
+.fx-pending .hero__rings,
+.fx-pending .hero__rain,
+.fx-pending .hero__grid,
+.fx-pending .hero__horizon,
+.fx-pending .hero__scroll,
+.fx-pending .skyline,
+.fx-pending [data-reveal] { opacity: 0; }
+
+.is-booting body { overflow: hidden; }
+
+/* ---------- boot sequence ---------- */
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  place-items: center;
+  padding: var(--gutter);
+  background: radial-gradient(ellipse at center, #0a1018 0%, #020306 70%);
+  font-family: var(--font-mono);
+  color: var(--cyan-hi);
+}
+.is-booting .boot { display: grid; }
+.boot__inner { width: min(520px, 100%); }
+.boot__brand {
+  margin: 0 0 20px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 12px rgba(63, 245, 238, 0.7);
+}
+.boot__brand span {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-shadow: none;
+}
+.boot__log {
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+.boot__log li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  color: var(--text);
+}
+.boot__log li::before { content: ">"; order: -1; color: var(--magenta); }
+.boot__log li::after {
+  /* dotted leader between the label and OK */
+  content: "";
+  order: 1;
+  flex: 1;
+  border-bottom: 1px dotted rgba(63, 245, 238, 0.35);
+}
+.boot__log b { order: 2; font-weight: 400; color: var(--cyan-hi); }
+.boot__bar {
+  height: 8px;
+  padding: 1px;
+  border: 1px solid rgba(63, 245, 238, 0.5);
+}
+.boot__bar i {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--cyan-hi) 0 8px, transparent 8px 10px);
+  box-shadow: 0 0 10px rgba(63, 245, 238, 0.6);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.boot__status {
+  margin: 20px 0 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.3rem, 5vw, 1.8rem);
+  letter-spacing: 0.2em;
+  color: var(--yellow);
+  text-shadow: 0 0 14px rgba(252, 238, 10, 0.6);
+  opacity: 0;
+}
+.boot__skip {
+  margin: 28px 0 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  animation: blink 1.4s steps(1) infinite;
+}
+
+/* ---------- HUD extras: section readout, sync %, scroll progress ---------- */
+.hud__loc {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--magenta);
+  white-space: nowrap;
+}
+.hud__sync {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.hud__sync b { font-weight: 400; color: var(--cyan-hi); }
+.fx .hud__sync { display: block; }
+.hud__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  pointer-events: none;
+}
+.hud__progress i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan-hi), var(--magenta), var(--yellow));
+  box-shadow: 0 0 10px var(--cyan-hi);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+@media (max-width: 1200px) { .hud__loc { display: none; } }
+@media (max-width: 1100px) { .fx .hud__sync { display: none; } }
+
+[data-hover-scramble] { display: inline-block; }
+
+/* ---------- hero: neon rain ---------- */
+.hero__rain {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 var(--horizon), transparent calc(var(--horizon) + 18%));
+          mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 var(--horizon), transparent calc(var(--horizon) + 18%));
+}
+.hero__rain::before,
+.hero__rain::after {
+  /* each layer is one tile taller than the hero and slides down exactly one tile per loop */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -320px;
+  height: calc(100% + 320px);
+  will-change: transform;
+}
+.hero__rain::after { top: -520px; height: calc(100% + 520px); }
+.hero__rain::before {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><path stroke='%233ff5ee' stroke-opacity='0.6' d='M290 238v28M264 97v28M266 243v19M99 48v34M159 72v28M279 21v16M206 231v33M84 7v34M274 32v40M22 97v15M127 15v42M241 167v38M306 100v28M123 150v30'/></svg>");
+  background-size: 320px 320px;
+  opacity: 0.45;
+  animation: rain-near 0.55s linear infinite;
+}
+.hero__rain::after {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='520'><path stroke='%23ff2a6d' stroke-opacity='0.55' d='M8 339v71M472 335v45M420 282v57M264 161v45M239 262v88M34 35v58'/><path stroke='%23ffffff' stroke-opacity='0.35' d='M114 205v66M301 197v36M21 433v34M222 107v30M485 192v33M433 37v55'/></svg>");
+  background-size: 520px 520px;
+  opacity: 0.3;
+  animation: rain-far 1.3s linear infinite;
+}
+@keyframes rain-near { to { transform: translateY(320px); } }
+@keyframes rain-far { to { transform: translateY(520px); } }
+
+/* ---------- hero: procedural skyline (built by main.js) ---------- */
+.skyline {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: calc(100% - var(--horizon));
+  height: 36%;
+  z-index: -2;
+  overflow: visible;
+  pointer-events: none;
+}
+.skyline--far { height: 40%; }
+.skyline--far .bldg { fill: #0b0f1f; }
+.skyline--near .bldg {
+  fill: #05070d;
+  stroke: rgba(10, 186, 181, 0.22);
+  stroke-width: 1;
+}
+.skyline .win { opacity: 0.8; }
+.skyline--far .win { opacity: 0.3; }
+.skyline .win--flicker { animation: win-flicker 5s steps(1) infinite; }
+.skyline .antenna { fill: none; stroke: #1d2438; stroke-width: 2; }
+.skyline .beacon {
+  fill: var(--magenta);
+  filter: drop-shadow(0 0 4px var(--magenta));
+  animation: beacon 1.6s steps(1) infinite;
+}
+@keyframes win-flicker {
+  0%, 100% { opacity: 0.8; }
+  38% { opacity: 0.08; }
+  41% { opacity: 0.8; }
+  66% { opacity: 0.15; }
+  68% { opacity: 0.8; }
+}
+@keyframes beacon { 50% { opacity: 0.12; } }
+
+/* dark plate behind the hero copy so it reads over the skyline */
+.hero__content::before {
+  content: "";
+  position: absolute;
+  inset: -12% -18%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(5, 6, 10, 0.78), rgba(5, 6, 10, 0.4) 60%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- hero: HUD rings behind the title ---------- */
+.hero__rings {
+  /* centred with margins, not translate: GSAP owns this element's transform (intro + parallax) */
+  --ring: min(82vw, 640px);
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 13vh);
+  width: var(--ring);
+  height: var(--ring);
+  margin: calc(var(--ring) / -2) 0 0 calc(var(--ring) / -2);
+  z-index: -1;
+  opacity: 0.32;
+  overflow: visible;
+  pointer-events: none;
+}
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--cyan-hi);
+  will-change: transform;
+}
+.ring--a { stroke-width: 1; stroke-dasharray: 2 10; animation: spin 70s linear infinite; }
+.ring--b { stroke-width: 7; stroke-dasharray: 1 13; stroke-opacity: 0.55; animation: spin 45s linear infinite reverse; }
+.ring--c { stroke-width: 1.5; stroke: var(--magenta); stroke-dasharray: 140 36 18 36; animation: spin 26s linear infinite; }
+.ring--d { stroke-width: 3; opacity: 0.75; animation: spin 16s linear infinite reverse; }
+@keyframes spin { to { rotate: 360deg; } }
+
+/* ---------- hero: signal meter in the readout ---------- */
+.signal {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.signal i {
+  width: 3px;
+  background: var(--cyan-hi);
+  box-shadow: 0 0 4px var(--cyan-hi);
+  animation: signal 1.8s ease-in-out infinite;
+}
+.signal i:nth-child(1) { height: 20%; }
+.signal i:nth-child(2) { height: 40%; animation-delay: 0.15s; }
+.signal i:nth-child(3) { height: 60%; animation-delay: 0.3s; }
+.signal i:nth-child(4) { height: 80%; animation-delay: 0.45s; }
+.signal i:nth-child(5) { height: 100%; animation-delay: 0.6s; }
+@keyframes signal { 50% { opacity: 0.2; } }
+
+/* ---------- caution-tape tickers ---------- */
+.tickers {
+  position: relative;
+  z-index: 2;
+  height: 120px;
+  margin-top: -30px;
+  pointer-events: none;
+}
+.ticker {
+  position: absolute;
+  left: -5%;
+  top: 50%;
+  width: 110%;
+  overflow: hidden;
+  padding: 6px 0;
+  font-family: var(--font-display), "Noto Sans SC", sans-serif;
+  font-weight: 900;
+  font-size: 0.92rem;
+  letter-spacing: 0.16em;
+  line-height: 1.6;
+  white-space: nowrap;
+  color: #05060a;
+}
+.ticker--yellow {
+  rotate: -2.5deg;
+  translate: 0 -50%;
+  background: var(--yellow);
+  border-block: 5px solid transparent;
+  border-image: repeating-linear-gradient(45deg, #05060a 0 8px, var(--yellow) 8px 16px) 5;
+  box-shadow: 0 0 28px rgba(252, 238, 10, 0.35);
+}
+.ticker--magenta {
+  rotate: 2deg;
+  translate: 0 -50%;
+  background: var(--magenta);
+  opacity: 0.92;
+  box-shadow: 0 0 24px rgba(255, 42, 109, 0.4);
+}
+.ticker__track {
+  display: inline-flex;
+  will-change: transform;
+  animation: marquee 32s linear infinite;
+}
+.ticker--magenta .ticker__track { animation-duration: 40s; animation-direction: reverse; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---------- timeline nodes light up as the beam passes (only when JS drives it) ---------- */
+.fx .timeline li:not(.is-lit)::before {
+  background: var(--bg);
+  border-color: rgba(63, 245, 238, 0.25);
+  box-shadow: none;
+}
+.fx .timeline li.is-lit::before { animation: node-ping 0.7s ease-out; }
+@keyframes node-ping {
+  from { box-shadow: 0 0 0 0 rgba(63, 245, 238, 0.9); }
+  to   { box-shadow: 0 0 0 16px rgba(63, 245, 238, 0); }
+}
+
+/* ---------- hover glitches ---------- */
+.shard:hover h3,
+.shard:focus-visible h3,
+.btn:hover .btn__label { animation: rgb-jitter 0.3s steps(2) infinite; }
+@keyframes rgb-jitter {
+  0%   { text-shadow: 2px 0 var(--magenta), -2px 0 var(--cyan-hi); }
+  50%  { text-shadow: -2px 1px var(--magenta), 2px -1px var(--yellow); }
+  100% { text-shadow: 1px 0 var(--magenta), -1px 0 var(--cyan-hi); }
+}
+
+.id-card:hover .id-card__photo img { animation: photo-glitch 1.2s steps(1) infinite; }
+@keyframes photo-glitch {
+  0%, 100% { transform: none; clip-path: none; }
+  12% { transform: translate(-4px, 1px); clip-path: inset(12% 0 58% 0); }
+  16% { transform: translate(4px, -1px); clip-path: inset(48% 0 22% 0); filter: grayscale(0) hue-rotate(120deg) contrast(1.5); }
+  20% { transform: none; clip-path: none; }
+  62% { transform: translate(3px, 0); clip-path: inset(70% 0 6% 0); }
+  65% { transform: none; clip-path: none; }
+}
+
+/* holographic glare for vanilla-tilt (overrides its white gradient) */
+.js-tilt-glare-inner {
+  background-image: linear-gradient(0deg, rgba(63, 245, 238, 0) 0%, rgba(63, 245, 238, 0.55) 55%, rgba(255, 42, 109, 0.55) 100%) !important;
+  mix-blend-mode: screen;
+}
+
+/* ---------- reticle cursor (fine pointers only; enabled by main.js) ---------- */
+.reticle { display: none; }
+.has-reticle .reticle {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 150;
+  pointer-events: none;
+}
+.has-reticle,
+.has-reticle a,
+.has-reticle button { cursor: none; }
+.reticle__frame {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+}
+.reticle__frame i {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 0 solid var(--cyan-hi);
+  filter: drop-shadow(0 0 4px var(--cyan-hi));
+  transition: border-color 0.2s, width 0.2s, height 0.2s;
+}
+.reticle__frame i:nth-child(1) { left: 0; top: 0; border-left-width: 2px; border-top-width: 2px; }
+.reticle__frame i:nth-child(2) { right: 0; top: 0; border-right-width: 2px; border-top-width: 2px; }
+.reticle__frame i:nth-child(3) { right: 0; bottom: 0; border-right-width: 2px; border-bottom-width: 2px; }
+.reticle__frame i:nth-child(4) { left: 0; bottom: 0; border-left-width: 2px; border-bottom-width: 2px; }
+.reticle__dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 4px;
+  background: var(--magenta);
+  box-shadow: 0 0 8px var(--magenta);
+}
+.reticle__label {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--yellow);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.reticle-locked .reticle__label { opacity: 1; }
+.reticle-locked .reticle__frame i {
+  width: 12px;
+  height: 12px;
+  border-color: var(--yellow);
+  filter: drop-shadow(0 0 6px var(--yellow));
+}
+
+/* ---------- random screen glitch (bands placed by main.js) ---------- */
+.fx-glitch {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  visibility: hidden;
+  pointer-events: none;
+}
+.fx-glitch i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(63, 245, 238, 0.2);
+  -webkit-backdrop-filter: invert(1);
+          backdrop-filter: invert(1);
+}
+.fx-glitch i:nth-child(even) {
+  background: rgba(255, 42, 109, 0.3);
+  -webkit-backdrop-filter: hue-rotate(160deg) saturate(4);
+          backdrop-filter: hue-rotate(160deg) saturate(4);
+}
+
+/* CSS loops pause while their section is scrolled out of view (class toggled by main.js) */
+.is-offscreen,
+.is-offscreen *,
+.is-offscreen *::before,
+.is-offscreen *::after { animation-play-state: paused !important; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 760px) {
+  .hero__rings { top: calc(50% - 16vh); }
+  .tickers { height: 96px; margin-top: -20px; }
+  .ticker { font-size: 0.78rem; }
+}
