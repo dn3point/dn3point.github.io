@@ -80,7 +80,7 @@
     home: '00 // HOME',
     about: '01 // IDENTITY',
     stack: '02 // CYBERWARE',
-    log: '03 // SYSTEM LOG',
+    log: '03 // MISSION LOG',
     projects: '04 // DATA SHARDS',
     contact: '05 // JACK IN',
   };
@@ -184,11 +184,11 @@
     if (!window.Typed || reduceMotion) return;
     new window.Typed('#typed', {
       strings: [
-        'Software Engineer @ GIC Labs',
-        'Web · Mobile · Cloud',
-        'Jacked in from Singapore since 2013',
-        'Studied networks & streaming @ NUS',
-        'Currently building. Always learning.',
+        'Senior Software Engineer @ GIC',
+        'AI · Data · Software',
+        'Pipelines that swallow 250K events/sec',
+        "11 years on Singapore's grid",
+        'Ex-Autodesk · Agoda · NextLabs · Oracle',
       ],
       typeSpeed: 42,
       backSpeed: 18,
@@ -447,6 +447,14 @@
     field.textContent = placeholder(field.textContent);
   });
 
+  // combat stats start at zero and count up on reveal; the HTML holds the final values
+  const formatCount = (node, value) => {
+    const { prefix = '', suffix = '', decimals = 0 } = node.dataset;
+    return `${prefix}${value.toFixed(Number(decimals))}${suffix}`;
+  };
+  const counters = document.querySelectorAll('[data-count]');
+  counters.forEach((node) => { node.textContent = formatCount(node, 0); });
+
   const revealInner = (panel, delay) => {
     const chips = panel.querySelectorAll('.chips li');
     if (chips.length) {
@@ -455,8 +463,18 @@
     panel.querySelectorAll('[data-decode]').forEach((field, i) => {
       decode(field, field.dataset.text, { duration: 0.8, delay: delay + i * 0.08 });
     });
-    const tags = panel.querySelectorAll('.about__tags li');
-    if (tags.length) gsap.from(tags, { opacity: 0, y: 12, duration: 0.4, stagger: 0.06, delay: delay + 0.3 });
+    const tags = panel.querySelectorAll('.about__tags li, .about__certs li');
+    if (tags.length) gsap.from(tags, { opacity: 0, y: 12, duration: 0.4, stagger: 0.06, delay: delay + 0.3, clearProps: 'transform' });
+    panel.querySelectorAll('[data-count]').forEach((node, i) => {
+      const counter = { value: 0 };
+      gsap.to(counter, {
+        value: Number(node.dataset.count),
+        duration: 1.6,
+        ease: 'power2.out',
+        delay: delay + i * 0.1,
+        onUpdate: () => { node.textContent = formatCount(node, counter.value); },
+      });
+    });
   };
 
   const panels = gsap.utils.toArray('[data-reveal]');
@@ -493,7 +511,7 @@
     ease: 'none',
     scrollTrigger: { trigger: '.timeline', start: 'top 72%', end: 'bottom 72%', scrub: 0.6 },
   });
-  gsap.utils.toArray('.timeline li').forEach((li) => {
+  gsap.utils.toArray('.timeline > li').forEach((li) => {
     gsap.from(li, {
       opacity: 0,
       x: 40,

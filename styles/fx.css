@@ -326,12 +326,12 @@
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ---------- timeline nodes light up as the beam passes (only when JS drives it) ---------- */
-.fx .timeline li:not(.is-lit)::before {
+.fx .timeline > li:not(.is-lit)::before {
   background: var(--bg);
   border-color: rgba(63, 245, 238, 0.25);
   box-shadow: none;
 }
-.fx .timeline li.is-lit::before { animation: node-ping 0.7s ease-out; }
+.fx .timeline > li.is-lit::before { animation: node-ping 0.7s ease-out; }
 @keyframes node-ping {
   from { box-shadow: 0 0 0 0 rgba(63, 245, 238, 0.9); }
   to   { box-shadow: 0 0 0 16px rgba(63, 245, 238, 0); }
